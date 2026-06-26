@@ -1,0 +1,12 @@
+Esta carpeta debe contener el archivo .pkl con el modelo entrenado.
+
+Ejemplo: modelo_ventas.pkl
+
+Generado desde el notebook de Python con:
+    import pickle
+    with open("modelo_ventas.pkl", "wb") as f:
+        pickle.dump(modelo, f)
+
+o con joblib (alternativa más eficiente para modelos de scikit-learn):
+    import joblib
+    joblib.dump(modelo, "modelo_ventas.pkl")

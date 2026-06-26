@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block titulo %}Predicción — Análisis de Ventas de Videojuegos{% endblock %}
+
+{% block contenido %}
+
+<section class="seccion-prediccion">
+    <h1>Predicción de ventas globales</h1>
+    <p class="texto-ayuda">
+        Completa los datos del videojuego para estimar sus ventas globales (en millones de copias).
+    </p>
+
+    <form method="POST" class="formulario">
+
+        <div class="campo">
+            <label for="plataforma">Plataforma</label>
+            <select name="plataforma" id="plataforma">
+                <option value="PS4" {% if valores.plataforma == "PS4" %}selected{% endif %}>PS4</option>
+                <option value="X360" {% if valores.plataforma == "X360" %}selected{% endif %}>X360</option>
+                <option value="Wii" {% if valores.plataforma == "Wii" %}selected{% endif %}>Wii</option>
+                <option value="PC" {% if valores.plataforma == "PC" %}selected{% endif %}>PC</option>
+                <option value="DS" {% if valores.plataforma == "DS" %}selected{% endif %}>DS</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="genero">Género</label>
+            <select name="genero" id="genero">
+                <option value="Action" {% if valores.genero == "Action" %}selected{% endif %}>Action</option>
+                <option value="Sports" {% if valores.genero == "Sports" %}selected{% endif %}>Sports</option>
+                <option value="Shooter" {% if valores.genero == "Shooter" %}selected{% endif %}>Shooter</option>
+                <option value="Role-Playing" {% if valores.genero == "Role-Playing" %}selected{% endif %}>Role-Playing</option>
+                <option value="Puzzle" {% if valores.genero == "Puzzle" %}selected{% endif %}>Puzzle</option>
+                <option value="Strategy" {% if valores.genero == "Strategy" %}selected{% endif %}>Strategy</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="anio">Año de lanzamiento</label>
+            <input
+                type="number"
+                name="anio"
+                id="anio"
+                min="1980"
+                max="2026"
+                value="{{ valores.anio or 2020 }}"
+            >
+        </div>
+
+        <div class="campo">
+            <label for="critic_score">Puntaje de críticos (0–100)</label>
+            <input
+                type="number"
+                name="critic_score"
+                id="critic_score"
+                min="0"
+                max="100"
+                value="{{ valores.critic_score or 75 }}"
+            >
+        </div>
+
+        <button type="submit" class="boton boton--primario">Predecir ventas</button>
+    </form>
+
+    {% if resultado is not none %}
+    <div class="resultado">
+        <span class="resultado__etiqueta">Ventas globales estimadas</span>
+        <span class="resultado__valor">{{ resultado }} millones de copias</span>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}

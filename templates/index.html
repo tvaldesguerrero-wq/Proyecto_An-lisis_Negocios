@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block titulo %}Inicio — Análisis de Ventas de Videojuegos{% endblock %}
+
+{% block contenido %}
+
+<section class="hero">
+    <h1 class="hero__titulo">Predicción de ventas globales de videojuegos</h1>
+    <p class="hero__subtitulo">
+        Modelo predictivo entrenado sobre 16.720 títulos, con variables de
+        plataforma, género, calificación de críticos y desempeño histórico
+        de ventas por región.
+    </p>
+    <a href="{{ url_for('prediccion') }}" class="boton boton--primario">
+        Ir al modelo de predicción
+    </a>
+</section>
+
+<section class="estadisticas">
+    <div class="estadistica">
+        <span class="estadistica__valor">{{ stats.total_juegos }}</span>
+        <span class="estadistica__etiqueta">Juegos analizados</span>
+    </div>
+    <div class="estadistica">
+        <span class="estadistica__valor">{{ stats.plataformas }}</span>
+        <span class="estadistica__etiqueta">Plataformas</span>
+    </div>
+    <div class="estadistica">
+        <span class="estadistica__valor">{{ stats.generos }}</span>
+        <span class="estadistica__etiqueta">Géneros</span>
+    </div>
+    <div class="estadistica">
+        <span class="estadistica__valor">{{ stats.anio_min }}–{{ stats.anio_max }}</span>
+        <span class="estadistica__etiqueta">Rango de años</span>
+    </div>
+</section>
+
+<section class="aviso">
+    <p>
+        <strong>Nota de desarrollo:</strong> esta página usa datos de ejemplo
+        mientras se entrena el modelo definitivo. La estructura final no
+        cambiará una vez integrado el modelo real.
+    </p>
+</section>
+
+{% endblock %}
