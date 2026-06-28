@@ -5,7 +5,7 @@ Archivo principal que inicia el servidor Flask.
 NOTA PARA EL EQUIPO:
 Este scaffold usa datos DUMMY (de prueba) generados en utils/model_utils.py.
 Cuando el modelo real (.pkl) esté listo, solo hay que:
-  1. Copiar el archivo .pkl entrenado a la carpeta models/
+  1.venv\Scripts\Activate.ps1
   2. Reemplazar las funciones dummy en utils/model_utils.py por la carga real del modelo
   3. No es necesario tocar este archivo ni los templates HTML.
 """
