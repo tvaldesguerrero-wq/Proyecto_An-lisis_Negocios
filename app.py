@@ -1,33 +1,30 @@
 """
 app.py
 Archivo principal que inicia el servidor Flask.
-
-NOTA PARA EL EQUIPO:
-Este scaffold usa datos DUMMY (de prueba) generados en utils/model_utils.py.
-Cuando el modelo real (.pkl) esté listo, solo hay que:
-  1.venv\Scripts\Activate.ps1
-  2. Reemplazar las funciones dummy en utils/model_utils.py por la carga real del modelo
-  3. No es necesario tocar este archivo ni los templates HTML.
 """
 
 from flask import Flask, render_template, request
-from utils.model_utils import predecir_ventas, obtener_estadisticas_dataset
+from utils.model_utils import (
+    predecir_ventas,
+    obtener_estadisticas_dataset,
+    obtener_feature_importance,
+)
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def home():
-    """Página principal: presentación del proyecto y estadísticas generales."""
     stats = obtener_estadisticas_dataset()
-    return render_template("index.html", stats=stats)
+    importancia = obtener_feature_importance(top_n=6)
+    return render_template("index.html", stats=stats, importancia=importancia)
 
 
 @app.route("/prediccion", methods=["GET", "POST"])
 def prediccion():
-    """Página de predicciones: formulario + resultado del modelo."""
     resultado = None
     valores_formulario = {}
+    importancia = obtener_feature_importance(top_n=8)
 
     if request.method == "POST":
         valores_formulario = {
@@ -42,6 +39,7 @@ def prediccion():
         "prediccion.html",
         resultado=resultado,
         valores=valores_formulario,
+        importancia=importancia,
     )
 
 

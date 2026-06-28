@@ -1,46 +1,88 @@
 {% extends "base.html" %}
 
-{% block titulo %}Inicio — Análisis de Ventas de Videojuegos{% endblock %}
+{% block titulo %}Inicio — Análisis de ventas de videojuegos{% endblock %}
 
 {% block contenido %}
 
 <section class="hero">
+    <span class="hero__etiqueta">Random Forest · R² 0.42</span>
     <h1 class="hero__titulo">Predicción de ventas globales de videojuegos</h1>
     <p class="hero__subtitulo">
-        Modelo predictivo entrenado sobre 16.720 títulos, con variables de
-        plataforma, género, calificación de críticos y desempeño histórico
-        de ventas por región.
+        Modelo de regresión entrenado sobre 16.416 títulos, considerando
+        plataforma, género y desempeño de crítica y usuarios para estimar
+        ventas globales en millones de copias.
     </p>
     <a href="{{ url_for('prediccion') }}" class="boton boton--primario">
         Ir al modelo de predicción
     </a>
 </section>
 
-<section class="estadisticas">
+<div class="estadisticas">
     <div class="estadistica">
-        <span class="estadistica__valor">{{ stats.total_juegos }}</span>
+        <span class="estadistica__valor" data-contador data-target="{{ stats.total_juegos }}">0</span>
         <span class="estadistica__etiqueta">Juegos analizados</span>
     </div>
     <div class="estadistica">
-        <span class="estadistica__valor">{{ stats.plataformas }}</span>
+        <span class="estadistica__valor" data-contador data-target="{{ stats.plataformas }}">0</span>
         <span class="estadistica__etiqueta">Plataformas</span>
     </div>
     <div class="estadistica">
-        <span class="estadistica__valor">{{ stats.generos }}</span>
+        <span class="estadistica__valor" data-contador data-target="{{ stats.generos }}">0</span>
         <span class="estadistica__etiqueta">Géneros</span>
     </div>
     <div class="estadistica">
-        <span class="estadistica__valor">{{ stats.anio_min }}–{{ stats.anio_max }}</span>
-        <span class="estadistica__etiqueta">Rango de años</span>
+        <span class="estadistica__valor" data-contador data-target="{{ stats.r2_modelo }}" data-decimales="2">0</span>
+        <span class="estadistica__etiqueta">R² del modelo</span>
+    </div>
+</div>
+
+<section class="panel">
+    <div class="panel__encabezado">
+        <h2 class="panel__titulo">Variables más relevantes para el modelo</h2>
+        <span class="panel__nota">Random Forest — feature importance</span>
+    </div>
+    <div class="grafico-importancia">
+        {% for item in importancia %}
+        <div class="barra-importancia">
+            <div class="barra-importancia__cabecera">
+                <span class="barra-importancia__nombre">{{ item.variable }}</span>
+                <span class="barra-importancia__valor">{{ item.importancia }}</span>
+            </div>
+            <div class="barra-importancia__pista">
+                <div class="barra-importancia__relleno" data-ancho="{{ item.porcentaje_relativo }}"></div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </section>
 
-<section class="aviso">
-    <p>
-        <strong>Nota de desarrollo:</strong> esta página usa datos de ejemplo
-        mientras se entrena el modelo definitivo. La estructura final no
-        cambiará una vez integrado el modelo real.
-    </p>
-</section>
+<script>
+    // Animación de conteo para las métricas principales
+    document.querySelectorAll('[data-contador]').forEach(function (el) {
+        const target = parseFloat(el.getAttribute('data-target'));
+        const decimales = parseInt(el.getAttribute('data-decimales') || '0');
+        const duracion = 900;
+        const inicio = performance.now();
+
+        function actualizar(ahora) {
+            const progreso = Math.min((ahora - inicio) / duracion, 1);
+            const facilitado = 1 - Math.pow(1 - progreso, 3);
+            const valorActual = target * facilitado;
+            el.textContent = decimales > 0 ? valorActual.toFixed(decimales) : Math.round(valorActual).toLocaleString('es-CL');
+            if (progreso < 1) {
+                requestAnimationFrame(actualizar);
+            }
+        }
+        requestAnimationFrame(actualizar);
+    });
+
+    // Animación de las barras de importancia (de 0 al valor real)
+    document.querySelectorAll('[data-ancho]').forEach(function (barra, i) {
+        const ancho = barra.getAttribute('data-ancho');
+        setTimeout(function () {
+            barra.style.width = ancho + '%';
+        }, 150 + i * 80);
+    });
+</script>
 
 {% endblock %}
