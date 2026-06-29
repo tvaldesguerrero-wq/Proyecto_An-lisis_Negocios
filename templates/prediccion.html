@@ -57,6 +57,7 @@
                 max="100"
                 value="{{ valores.critic_score or 75 }}"
             >
+            <span class="campo__ayuda">Nota promedio de la crítica especializada (ej. Metacritic)</span>
         </div>
 
         <button type="submit" class="boton boton--primario">Predecir ventas</button>
@@ -65,7 +66,8 @@
     {% if resultado is not none %}
     <div class="resultado">
         <span class="resultado__etiqueta">Ventas globales estimadas</span>
-        <span class="resultado__valor">{{ resultado }} millones de copias</span>
+        <span class="resultado__valor">{{ resultado.texto }}</span>
+        <span class="resultado__contexto">({{ resultado.millones }} millones de copias)</span>
     </div>
     {% endif %}
 

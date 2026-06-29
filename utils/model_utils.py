@@ -85,11 +85,40 @@ def construir_entrada(valores_formulario):
     return df_entrada
 
 
+def formatear_ventas(millones):
+    """
+    Convierte un valor en millones de copias a un texto legible,
+    adaptando la unidad según la magnitud:
+      - >= 1 millón   -> "X.XX millones de copias"
+      - >= 1 mil      -> "X mil copias"
+      - menor a eso   -> "X copias"
+    """
+    copias = millones * 1_000_000
+
+    if copias >= 1_000_000:
+        return f"{copias / 1_000_000:.2f} millones de copias"
+    elif copias >= 1_000:
+        texto_mil = f"{copias / 1_000:,.0f}".replace(",", ".")
+        return f"{texto_mil} mil copias"
+    else:
+        texto_unidades = f"{copias:,.0f}".replace(",", ".")
+        return f"{texto_unidades} copias"
+
+
 def predecir_ventas(valores_formulario):
-    """Genera la predicción de ventas globales (millones de copias)."""
+    """
+    Genera la predicción de ventas globales.
+    Devuelve un diccionario con el valor en millones (para cálculos)
+    y el texto ya formateado de forma legible (para mostrar en la UI).
+    """
     entrada = construir_entrada(valores_formulario)
     prediccion = modelo.predict(entrada)
-    return round(float(prediccion[0]), 2)
+    millones = round(float(prediccion[0]), 4)
+
+    return {
+        "millones": millones,
+        "texto": formatear_ventas(millones),
+    }
 
 
 def obtener_estadisticas_dataset():
