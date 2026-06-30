@@ -24,7 +24,6 @@ def home():
 def prediccion():
     resultado = None
     valores_formulario = {}
-    importancia = obtener_feature_importance(top_n=8)
 
     if request.method == "POST":
         valores_formulario = {
@@ -39,7 +38,6 @@ def prediccion():
         "prediccion.html",
         resultado=resultado,
         valores=valores_formulario,
-        importancia=importancia,
     )
 
 

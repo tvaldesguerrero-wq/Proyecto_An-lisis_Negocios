@@ -71,35 +71,6 @@
     </div>
     {% endif %}
 
-    <section class="panel">
-        <div class="panel__encabezado">
-            <h2 class="panel__titulo">Qué variables pesan más en la predicción</h2>
-            <span class="panel__nota">Random Forest — feature importance</span>
-        </div>
-        <div class="grafico-importancia">
-            {% for item in importancia %}
-            <div class="barra-importancia">
-                <div class="barra-importancia__cabecera">
-                    <span class="barra-importancia__nombre">{{ item.variable }}</span>
-                    <span class="barra-importancia__valor">{{ item.importancia }}</span>
-                </div>
-                <div class="barra-importancia__pista">
-                    <div class="barra-importancia__relleno" data-ancho="{{ item.porcentaje_relativo }}"></div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-
 </section>
-
-<script>
-    document.querySelectorAll('[data-ancho]').forEach(function (barra, i) {
-        const ancho = barra.getAttribute('data-ancho');
-        setTimeout(function () {
-            barra.style.width = ancho + '%';
-        }, 150 + i * 80);
-    });
-</script>
 
 {% endblock %}
